@@ -27,7 +27,23 @@ class TDescantHit : public TGRSIDetectorHit {
       Int_t    fZc;
       Int_t    fCcShort;
       Int_t    fCcLong;
-      
+   
+      Double_t fSlopePsd;
+      std::vector<Short_t> fMonitor;
+      Short_t fMax;
+      std::vector<Int_t> fPartialSum;
+
+      std::vector<Double_t> fDiffWaveform;
+      std::vector<Double_t> fDiffIntWaveform;
+      std::vector<Double_t> fShapedWaveform;
+      std::vector<Double_t> fPsdMonitor;
+      Double_t fMaxElement;
+      Int_t    fZc2;
+
+   public:
+      std::vector<Double_t> fTimes;
+      Double_t fCfdTime;
+
    public:
       /////////////////////////		/////////////////////////////////////
       inline void SetFilterPattern(const int &x)   { fFilter   = x; }   //!<!
@@ -55,7 +71,24 @@ class TDescantHit : public TGRSIDetectorHit {
       std::vector<Int_t> CalculatePartialSum(); //!<!
       Int_t CalculatePsd(double fraction, unsigned int interpolation_steps); //!<!
       Int_t CalculatePsdAndPartialSums(double fraction, unsigned int interpolation_steps, std::vector<Int_t>& partialsums); //!<!
-      
+   
+   
+      Short_t CalculateWaveformMaximum(unsigned int halfwindowsize); //!<!
+      std::vector<Int_t> CalculateAverageWaveform(unsigned int halfsmoothingwindow); //!<!
+      Int_t CalculatePsd(double fraction, int halfsmoothingwindow, unsigned int interpolation_steps); //!<!
+      Int_t CalculatePsdAndPartialSums(double fraction, int halfsmoothingwindow, unsigned int interpolation_steps, std::vector<Int_t>& partialsums); //!<!
+      Double_t CalculateSlopePsd(unsigned int peakdelay, unsigned int psddelay, unsigned int interpolation_steps); //!<!
+      std::vector<Int_t> CalculatePartialSum(int halfsmoothingwindow); //!<!
+      bool AnalyzeKentuckyWaveform();                                          //!<!
+      bool AnalyzeScopeWaveform();                                          //!<!
+   
+      Int_t CalculateCfdAndMonitorForSignal(double attenuation, unsigned int delay, unsigned int interpolationSteps, const std::vector<Double_t> inputSignal, std::vector<Double_t> &monitor); //!<!
+      Int_t CalculateCfdForPartialSums(double attenuation, unsigned int delay, unsigned int interpolationStep); //!<!
+      static std::vector<Double_t> Differentiator(const std::vector<Double_t> inputSignal, double timeconstant); //!<!
+      static std::vector<Double_t> Integrator(const std::vector<Double_t> inputSignal, double timeconstant); //!<!
+      static std::vector<Double_t> ShortVectorToDouble(const std::vector<Short_t> inputSignal); //!<!
+      static std::vector<Double_t> IntVectorToDouble(const std::vector<Int_t> inputSignal); //!<!
+      static Int_t CalculateZeroCrossing(std::vector<Double_t> inputSignal, unsigned int interpolationSteps); //!<!
       bool InFilter(Int_t);                                          //!<!
       
       bool AnalyzeWaveform();                                          //!<!
