@@ -53,12 +53,14 @@ class TAngularCorrelation : public TObject {
 
       // simple setters
       void Set2DSlice(TH2D* hst) { f2DSlice = hst; }
-      void SetIndexCorrelation(TH1D* hst) { fIndexCorrelation = fIndexCorrelation; }
+      void SetIndexCorrelation(TH1D* hst) { } //fIndexCorrelation = fIndexCorrelation; }
       //TODO: move the next function to implementation file and update fIndexCorrelation
       void SetPeak(Int_t index, TPeak* peak) { fPeaks[index] = peak; }
       void Set1DSlice(Int_t index, TH1D* slice) { f1DSlices[index] = slice; }
 
+      // functions that do most of the work
       TH2D* Create2DSlice(THnSparse* hst, Double_t min, Double_t max, Bool_t folded, Bool_t grouping);
+      TH2D* Create2DSlice(TObjArray* hst, Double_t min, Double_t max, Bool_t folded, Bool_t grouping);
       TH1D* IntegralSlices(TH2* hst, Double_t min, Double_t max);
       TH1D* FitSlices(TH2* hst,TPeak* peak,Bool_t visualization);
       TH1D* DivideByWeights(TH1* hst);
@@ -68,6 +70,7 @@ class TAngularCorrelation : public TObject {
       TGraphAsymmErrors* CreateGraphFromHst() { return CreateGraphFromHst(fIndexCorrelation); }
       void UpdateIndexCorrelation();
       void UpdateDiagnostics();
+      void DisplayDiagnostics(TCanvas* c_diag);
 
       // map functions
       Bool_t CheckMaps(); // checks to make sure fIndexMap, fAngleMap, and fWeights are consistent 
